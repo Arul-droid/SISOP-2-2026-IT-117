@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 
+// merupakan definisi dari beberapa konstanta yang akan digunakan dalam program. LOG_FILE adalah nama file log yang akan digunakan untuk menyimpan pesan log, CONTRACT adalah nama file kontrak yang akan dipantau, dan LINE1 adalah string yang harus ada di baris pertama file kontrak agar dianggap valid.
 #define LOG_FILE    "work.log"
 #define CONTRACT    "contract.txt"
 #define LINE1       "\"A promise to keep going, even when unseen.\"\n"
