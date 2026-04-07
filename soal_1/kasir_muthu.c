@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+//deklarasi fungsi run_and_wait yang akan digunakan untuk menjalankan command dengan fork dan execvp
 void run_and_wait(char **args);
 
 int main() {
