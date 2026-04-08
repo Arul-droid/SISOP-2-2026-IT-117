@@ -39,7 +39,7 @@ void writeContract(int restored) {
     if (!f) return;
     char ts[32];
     getTimestamp(ts, sizeof(ts));
-    fprintf(f, LINE1);
+    fprintf(f, LINECONTRACT);
     fprintf(f, "\n");
     if (restored)
         fprintf(f, "restored at: %s\n", ts);
@@ -105,8 +105,8 @@ int main() {
     daemonize();
 
     // Tangkap sinyal untuk cleanup
-    signal(SIGTERM, handle_signal);
-    signal(SIGINT,  handle_signal);
+    signal(SIGTERM, handleSignal);
+    signal(SIGINT,  handleSignal);
 
     // Array kata-kata status untuk variasi log
     const char *statuses[] = {"[awake]", "[drifting]", "[numbness]"};
