@@ -147,3 +147,6 @@ int main() {
     writeLog("We really weren't meant to be together");
     return 0;
 }
+
+//source
+//https://claude.ai/share/e80361d5-1379-4dec-9ff3-ba79a5d5c1f1 and arul's own code for soal_2/contract_daemon.c
