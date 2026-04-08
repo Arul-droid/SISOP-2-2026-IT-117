@@ -8,33 +8,37 @@
 #include <sys/types.h>
 #include <fcntl.h>
 
-// merupakan definisi dari beberapa konstanta yang akan digunakan dalam program. LOG_FILE adalah nama file log yang akan digunakan untuk menyimpan pesan log, CONTRACT adalah nama file kontrak yang akan dipantau, dan LINE1 adalah string yang harus ada di baris pertama file kontrak agar dianggap valid.
-#define LOG_FILE    "work.log"
+// merupakan definisi dari beberapa konstanta yang akan digunakan dalam program. LOGFILE adalah nama file log yang akan digunakan untuk menyimpan pesan log, CONTRACT adalah nama file kontrak yang akan dipantau, dan LINE1 adalah string yang harus ada di baris pertama file kontrak agar dianggap valid.
+#define LOGFILE    "work.log"
 #define CONTRACT    "contract.txt"
-#define LINE1       "\"A promise to keep going, even when unseen.\"\n"
+#define LINECONTRACT  "\"A promise to keep going, even when unseen.\"\n"
 
+// Penanda global agar program tetap running atau berhenti
 volatile sig_atomic_t running = 1;
 
-/* ── File Handling (dari modul: fprintf, fopen, fclose) ── */
 
-void write_log(const char *msg) {
-    FILE *f = fopen(LOG_FILE, "a");   // mode 'a' = append
+/* ── File Handling (dari modul: fprintf, fopen, fclose) ── */
+// Prosedur untuk mengukir pesan ke dalam file log tanpa menghapus isi sebelumnya
+void writeLog(const char *msg) {
+    FILE *f = fopen(LOGFILE, "a");   // mode 'a' = append
     if (!f) return;
     fprintf(f, "%s\n", msg);
     fclose(f);
 }
 
-void get_timestamp(char *buf, size_t len) {
+// Mengambil detak waktu saat ini untuk dicatat dalam sistem
+void getTimestamp(char *buf, size_t len) {
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     strftime(buf, len, "%Y-%m-%d %H:%M:%S", tm);
 }
 
-void write_contract(int restored) {
+// Prosedur untuk menulis ulang file kontrak jika hilang atau rusak
+void writeContract(int restored) {
     FILE *f = fopen(CONTRACT, "w");   // mode 'w' = tulis ulang
     if (!f) return;
     char ts[32];
-    get_timestamp(ts, sizeof(ts));
+    getTimestamp(ts, sizeof(ts));
     fprintf(f, LINE1);
     fprintf(f, "\n");
     if (restored)
@@ -44,86 +48,89 @@ void write_contract(int restored) {
     fclose(f);
 }
 
-int contract_valid() {
+// Fungsi pengecekan: Apakah isi kontrak masih murni sesuai dengan LINE1?
+int contractValid() {
     FILE *f = fopen(CONTRACT, "r");   // mode 'r' = baca
     if (!f) return 0;
     char line[256];
     if (!fgets(line, sizeof(line), f)) { fclose(f); return 0; }
     fclose(f);
-    return strcmp(line, LINE1) == 0;
+    return strcmp(line, LINECONTRACT) == 0;
 }
 
-/* ── Signal Handler ── */
+// Signal Handler
 
-void handle_signal(int sig) {
-    (void)sig;
+void handleSignal(int signal) {
+    (void)signal;
     running = 0;
 }
 
-/* ── Daemonize (sesuai langkah modul) ── */
+// Daemonize 
 
 void daemonize() {
     pid_t pid;
 
-    // Langkah 1: Fork dan matikan parent
+    // Tahap 1: Melahirkan proses anak dan mematikan induknya
     pid = fork();
     if (pid < 0) exit(EXIT_FAILURE);
     if (pid > 0) exit(EXIT_SUCCESS);  // parent exit
 
-    // Langkah 2: umask
+    // Tahap 2: Reset izin akses file
     umask(0);
 
-    // Langkah 3: Buat SID baru (setsid)
+    // Tahap 3: Memisahkan diri dari sesi terminal
     if (setsid() < 0) exit(EXIT_FAILURE);
 
-    // Fork kedua agar tidak bisa acquire terminal
+    // Tahap tambahan: Fork sekali lagi agar benar-benar terisolasi
     pid = fork();
     if (pid < 0) exit(EXIT_FAILURE);
     if (pid > 0) exit(EXIT_SUCCESS);
 
-    // Langkah 4: Ubah working directory
+    // Tahap 4: Menetap di direktori saat ini
     if ((chdir(".")) < 0) exit(EXIT_FAILURE);
 
-    // Langkah 5: Tutup file descriptor standar
+    // Tahap 5: Menutup jalur komunikasi standar (input, output, error)
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
 
-    // Redirect ke /dev/null
+    // Mengalihkan sampah data ke /dev/null
     open("/dev/null", O_RDONLY);
     open("/dev/null", O_WRONLY);
     open("/dev/null", O_WRONLY);
 }
 
 int main() {
+    // Inisiasi proses daemon
     daemonize();
 
     // Tangkap sinyal untuk cleanup
     signal(SIGTERM, handle_signal);
     signal(SIGINT,  handle_signal);
 
+    // Array kata-kata status untuk variasi log
     const char *statuses[] = {"[awake]", "[drifting]", "[numbness]"};
     srand((unsigned)time(NULL));
 
     // Buat contract.txt saat daemon pertama jalan
-    write_contract(0);
+    writeContract(0);
 
     time_t last_log = time(NULL);
 
     // Langkah 6: Loop utama (dari modul: while + sleep)
     while (running) {
-        sleep(1);
+        sleep(1); // Beristirahat sejenak setiap detik
 
         time_t now = time(NULL);
 
-        // Monitor contract.txt
+        // Mengawasi integritas file CONTRACT
         if (access(CONTRACT, F_OK) != 0) {
-            // File dihapus → recreate
-            write_contract(1);
-        } else if (!contract_valid()) {
-            // Isi diubah → log + restore
-            write_log("contract violated.");
-            write_contract(1);
+            // Jika file lenyap, buat kembali
+            writeContract(1);
+        } else if (!contractValid()) {
+            // Jika isi berubah (tidak valid), catat di log lalu perbaiki
+            writeLog("contract violated.");
+            writeContract(1);
         }
 
         // Tulis log setiap 5 detik
@@ -131,12 +138,12 @@ int main() {
             char msg[64];
             snprintf(msg, sizeof(msg), "still working... %s",
                      statuses[rand() % 3]);
-            write_log(msg);
+            writeLog(msg);
             last_log = now;
         }
     }
 
     // Daemon dihentikan
-    write_log("We really weren't meant to be together");
+    writeLog("We really weren't meant to be together");
     return 0;
 }
