@@ -230,13 +230,13 @@ We really weren't meant to be together
 
 ![alt text](assets/soal2/mengubah_contract.png)
 ![alt text](assets/soal2/isi_workLog_diubah.png)
-> *[Taruh screenshot setelah `echo "hacked" > contract.txt` dan isi `work.log` yang ada "contract violated."]*
+
 
 **Pesan terakhir di log setelah daemon dihentikan**
 
 ![alt text](assets/soal2/mematikan_daemon.png)
 ![alt text](assets/soal2/isi_workLog_dimatikan.png)
-> *[Taruh screenshot setelah `pkill contract_daemon` dan isi `work.log` baris terakhir]*
+
 
 
 ---
@@ -353,34 +353,33 @@ Status yang digunakan: `RUNNING`, `SUCCESS`, `ERROR`.
 **Daemon berjalan dan nama proses menjadi "maya"**
 
 ![alt text](assets/soal3/maya_berjalan.png)
-> *[Taruh screenshot hasil `ps aux | grep maya` yang menampilkan proses bernama "maya"]*
+
 
 **Isi `LoveLetter.txt` dalam bentuk terenkripsi Base64**
 
 ![alt text](assets/soal3/isi_loveletter.png)
-> *[Taruh screenshot hasil `cat LoveLetter.txt` yang menampilkan string Base64]*
+
 
 **Hasil decrypt `LoveLetter.txt`**
 
 ![alt text](assets/soal3/isi_loveletter_dekripsi.png)
-> *[Taruh screenshot setelah `./angel -decrypt` dan `cat LoveLetter.txt` yang menampilkan kalimat asli]*
+
 
 **Isi `ethereal.log`**
 
 ![alt text](assets/soal3/isi_ethereal.png)
-> *[Taruh screenshot hasil `cat ethereal.log` yang menampilkan format log lengkap]*
+
 
 **Menghentikan daemon dengan `./angel -kill`**
 
 ![alt text](assets/soal3/matikan_daemon.png)
-> *[Taruh screenshot hasil `./angel -kill` dan konfirmasi daemon berhenti]*
+
 
 **Error handling — file tidak ditemukan**
 
 ![alt text](assets/soal3/error_handling(fileTidakAda).png)
-> *[Taruh screenshot ketika `./angel -decrypt` dijalankan tanpa file `LoveLetter.txt`]*
 
 **Error handling — daemon belum berjalan**
 
 ![alt text](assets/soal3/error_handling(daemonBelumJalan).png)
-> *[Taruh screenshot ketika `./angel -kill` dijalankan sebelum daemon aktif]*
+
