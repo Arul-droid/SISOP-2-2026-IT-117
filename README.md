@@ -94,32 +94,31 @@ Jika semua langkah berhasil, program mencetak:
 
 **Kompilasi dan menjalankan program**
 
-![Screenshot kompilasi dan hasil sukses](#)
-> *[Taruh screenshot hasil `gcc kasir_muthu.c -o kasir_muthu` dan `./kasir_muthu` yang sukses]*
+![assets/soal1/kasir_muthu_berhasil_jalan.png](assets/soal1/kasir_muthu_berhasil_jalan.png)
 
 **Isi folder `brankas_kedai` (hasil `tree`)**
 
-![Screenshot tree folder brankas_kedai](#)
-> *[Taruh screenshot hasil perintah `tree` yang menampilkan brankas_kedai, buku_hutang.csv, dan daftar_penunggak.txt]*
+![alt text](assets/soal1/isi_brankas_kedai.png)
 
 **Isi `daftar_penunggak.txt`**
 
-![Screenshot isi daftar_penunggak.txt](#)
-> *[Taruh screenshot hasil `cat brankas_kedai/daftar_penunggak.txt`]*
+![alt text](assets/soal1/isi_daftar_penunggak.png)
+
 
 **File `rahasia_muthu.zip` berhasil dibuat**
 
-![Screenshot rahasia_muthu.zip](#)
-> *[Taruh screenshot hasil `ls -lh rahasia_muthu.zip`]*
+![alt text](assets/soal1/zip_dibuat.png)
 
-**Error handling (file tidak ditemukan)**
 
-![Screenshot error handling](#)
-> *[Taruh screenshot ketika `buku_hutang.csv` tidak ada dan program mencetak pesan ERROR]*
+**Error handling**
+
+![alt text](assets/soal1/error_handling(noFile).png)
+![alt text](assets/soal1/error_handling(dirAda).png)
+
 
 ### Kendala
 
-Tidak ada kendala berarti. `zip` perlu diinstall terlebih dahulu di WSL dengan `sudo apt install zip -y`.
+`zip` perlu diinstall terlebih dahulu di WSL dengan `sudo apt install zip -y`.
 
 ---
 
@@ -209,37 +208,36 @@ We really weren't meant to be together
 
 **Daemon berjalan di background**
 
-![Screenshot daemon berjalan](#)
-> *[Taruh screenshot hasil `ps aux | grep contract_daemon` yang menunjukkan proses berjalan]*
+![alt text](assets/soal2/daemon_berhasil_jalan.png)
+
 
 **Isi `work.log` setelah beberapa detik**
 
-![Screenshot work.log](#)
-> *[Taruh screenshot hasil `tail -f work.log` yang menampilkan "still working... [awake/drifting/numbness]"]*
+![alt text](assets/soal2/isi_workLog.png)
+
 
 **`contract.txt` dibuat saat daemon start**
 
-![Screenshot contract.txt awal](#)
-> *[Taruh screenshot hasil `cat contract.txt` dengan "created at: ..."]*
+![alt text](assets/soal2/isi_contract.png)
 
-**`contract.txt` direstore setelah dihapus**
 
-![Screenshot restore setelah rm](#)
-> *[Taruh screenshot sebelum dan sesudah `rm contract.txt`, menunjukkan file muncul kembali dengan "restored at: ..."]*
+**`contract.txt` direstore**
+
+![alt text](assets/soal2/isi_contract_diubah.png)
+
 
 **Log "contract violated." setelah isi diubah**
 
-![Screenshot contract violated](#)
+![alt text](assets/soal2/mengubah_contract.png)
+![alt text](assets/soal2/isi_workLog_diubah.png)
 > *[Taruh screenshot setelah `echo "hacked" > contract.txt` dan isi `work.log` yang ada "contract violated."]*
 
 **Pesan terakhir di log setelah daemon dihentikan**
 
-![Screenshot pkill dan log terakhir](#)
+![alt text](assets/soal2/mematikan_daemon.png)
+![alt text](assets/soal2/isi_workLog_dimatikan.png)
 > *[Taruh screenshot setelah `pkill contract_daemon` dan isi `work.log` baris terakhir]*
 
-### Kendala
-
-Tidak ada kendala berarti.
 
 ---
 
@@ -351,42 +349,38 @@ Contoh:
 Status yang digunakan: `RUNNING`, `SUCCESS`, `ERROR`.
 
 ### Output
-
+![alt text](assets/soal3/penggunaan.png)
 **Daemon berjalan dan nama proses menjadi "maya"**
 
-![Screenshot ps aux maya](#)
+![alt text](assets/soal3/maya_berjalan.png)
 > *[Taruh screenshot hasil `ps aux | grep maya` yang menampilkan proses bernama "maya"]*
 
 **Isi `LoveLetter.txt` dalam bentuk terenkripsi Base64**
 
-![Screenshot LoveLetter terenkripsi](#)
+![alt text](assets/soal3/isi_loveletter.png)
 > *[Taruh screenshot hasil `cat LoveLetter.txt` yang menampilkan string Base64]*
 
 **Hasil decrypt `LoveLetter.txt`**
 
-![Screenshot setelah decrypt](#)
+![alt text](assets/soal3/isi_loveletter_dekripsi.png)
 > *[Taruh screenshot setelah `./angel -decrypt` dan `cat LoveLetter.txt` yang menampilkan kalimat asli]*
 
 **Isi `ethereal.log`**
 
-![Screenshot ethereal.log](#)
+![alt text](assets/soal3/isi_ethereal.png)
 > *[Taruh screenshot hasil `cat ethereal.log` yang menampilkan format log lengkap]*
 
 **Menghentikan daemon dengan `./angel -kill`**
 
-![Screenshot angel kill](#)
+![alt text](assets/soal3/matikan_daemon.png)
 > *[Taruh screenshot hasil `./angel -kill` dan konfirmasi daemon berhenti]*
 
 **Error handling — file tidak ditemukan**
 
-![Screenshot error decrypt](#)
+![alt text](assets/soal3/error_handling(fileTidakAda).png)
 > *[Taruh screenshot ketika `./angel -decrypt` dijalankan tanpa file `LoveLetter.txt`]*
 
 **Error handling — daemon belum berjalan**
 
-![Screenshot error kill](#)
+![alt text](assets/soal3/error_handling(daemonBelumJalan).png)
 > *[Taruh screenshot ketika `./angel -kill` dijalankan sebelum daemon aktif]*
-
-### Kendala
-
-Tidak ada kendala berarti.
